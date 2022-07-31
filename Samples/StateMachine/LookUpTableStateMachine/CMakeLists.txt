@@ -1,0 +1,1 @@
+add_executable(LookUpTableStateMachine LookUpTableStateMachine.cpp)
