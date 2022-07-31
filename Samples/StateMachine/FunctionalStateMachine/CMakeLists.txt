@@ -1,0 +1,1 @@
+add_executable(FunctionalStateMachine FunctionalStateMachine.cpp)

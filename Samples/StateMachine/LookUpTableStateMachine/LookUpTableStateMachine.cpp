@@ -1,5 +1,10 @@
 #include <iostream>
 
+// look up table state machine drawbacks:
+// They are large (space-wise). For every combination of input and state there is a record of the next state.
+// They are difficult to maintain by hand.
+// No actions can be performed during tansitions without another action table.
+
 /* States. */
 #define  IDLE                    0
 #define  DIAL                    1
@@ -31,7 +36,18 @@ int transtab[7][6] = /* transtab[Input][CurrentState] => NextState      */
 { IDLE,    DIAL,     BUSY,      IDLE,      IDLE, CONNECTED }, /* PICKUP_IND        */
 };
 
+static int cur_state = IDLE;
+
+void TransState(int event){
+    cur_state = transtab[event][cur_state];
+    std::cout<<"state:"<<cur_state<<std::endl;
+}
+
 int main(){
     std::cout<<"Look Up Table State Machine"<<std::endl;
-    return 0;
+    TransState(INCOMING_CALL_IND);
+    TransState(PICKUP_IND);
+    TransState(TIMEOUT_IND);
+
+    return 0;   
 }
