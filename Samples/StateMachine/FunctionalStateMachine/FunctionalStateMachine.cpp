@@ -37,8 +37,9 @@ struct StateMachine
   StateProc curState;
 };
 
-void NotifyInvalidInput(EIndication input){
-    std::cerr<<"invalid input"<<input<<std::endl;
+void NotifyInvalidInput(EIndication input)
+{
+  std::cerr << "invalid input" << input << std::endl;
 }
 
 /* Here are the prototypes for the different                   */
@@ -48,76 +49,85 @@ void NotifyInvalidInput(EIndication input){
 /* react to an enumerated type as input.  This                 */
 /* can be changed to whatever data type (or                    */
 /* types) necessary to report the input stimulus.              */
-void Idle(TStateMachine      *sm,  EIndication input);
-void Dial(TStateMachine      *sm,  EIndication input);
-void Busy(TStateMachine      *sm,  EIndication input);
-void Alerting(TStateMachine  *sm,  EIndication input);
-void Connected(TStateMachine *sm,  EIndication input);
-void Ringing(TStateMachine   *sm,  EIndication input);
-
+void Idle(TStateMachine *sm, EIndication input);
+void Dial(TStateMachine *sm, EIndication input);
+void Busy(TStateMachine *sm, EIndication input);
+void Alerting(TStateMachine *sm, EIndication input);
+void Connected(TStateMachine *sm, EIndication input);
+void Ringing(TStateMachine *sm, EIndication input);
 
 void Idle(TStateMachine *sm, EIndication input)
 {
-  if (input == OFF_HOOK_IND)     /* On OFF_HOOK               */
-    sm->curState = Dial;                /*  - shift to Dial state    */
-  else if (input == INCOMING_CALL_IND)  /* On INCOMING_CALL    */
-    sm->curState = Ringing;             /*  - shift to Ringing state */
-                                        /* else stay the same        */
+  std::cout << __func__ << std::endl;
+  if (input == OFF_HOOK_IND)           /* On OFF_HOOK               */
+    sm->curState = Dial;               /*  - shift to Dial state    */
+  else if (input == INCOMING_CALL_IND) /* On INCOMING_CALL    */
+    sm->curState = Ringing;            /*  - shift to Ringing state */
+                                       /* else stay the same        */
 }
 
 void Dial(TStateMachine *sm, EIndication input)
 {
+  std::cout << __func__ << std::endl;
   switch (input)
   {
-    case DIGITS_IND:             /* On DIGITS_IND               */
-      sm->curState = Alerting;          /*   - shift to Alerting state */
-      break;
-      
-    case ON_HOOK_IND:            /* Hang up---go idle.          */
-      sm->curState = Idle;
-      break;
-      
-    default:
-      NotifyInvalidInput(input);        /* Send output to LBU          */
-      sm->curState = Idle;              /* Invalid, go back to idle    */
+  case DIGITS_IND:           /* On DIGITS_IND               */
+    sm->curState = Alerting; /*   - shift to Alerting state */
+    break;
+
+  case ON_HOOK_IND: /* Hang up---go idle.          */
+    sm->curState = Idle;
+    break;
+
+  default:
+    NotifyInvalidInput(input); /* Send output to LBU          */
+    sm->curState = Idle;       /* Invalid, go back to idle    */
   }
 }
 
 void Busy(TStateMachine *sm, EIndication input)
 {
-  sm->curState = Idle;    /* shift to Idle state on anything */
+  std::cout << __func__ << std::endl;
+  sm->curState = Idle; /* shift to Idle state on anything */
 }
 
 void Alerting(TStateMachine *sm, EIndication input)
 {
-  if (input == CONNECTED_IND)      /* On CONNECT                    */
-    sm->curState = Connected;             /*   - shift to Connect state    */
-  else                           /* else invalid, go back to idle */
-    sm->curState = Idle;                /*   - shift to Idle state       */
+  std::cout << __func__ << std::endl;
+  if (input == CONNECTED_IND) /* On CONNECT                    */
+    sm->curState = Connected; /*   - shift to Connect state    */
+  else                        /* else invalid, go back to idle */
+    sm->curState = Idle;      /*   - shift to Idle state       */
 }
 
 void Connected(TStateMachine *sm, EIndication input)
 {
-  sm->curState = Idle;  /*   - shift to Idle state on anything */
+  std::cout << __func__ << std::endl;
+
+  sm->curState = Idle; /*   - shift to Idle state on anything */
 }
 
 void Ringing(TStateMachine *sm, EIndication input)
 {
-  if (input == PICKUP_IND)       /* On PICKUP                     */
-    sm->curState = Connected;             /*   - shift to Connect state    */
-  else                                  /* else invalid, go back to idle */
-    sm->curState = Idle;                /*   - shift to Idle state       */
+  std::cout << __func__ << std::endl;
+
+  if (input == PICKUP_IND)    /* On PICKUP                     */
+    sm->curState = Connected; /*   - shift to Connect state    */
+  else                        /* else invalid, go back to idle */
+    sm->curState = Idle;      /*   - shift to Idle state       */
 }
 
-TStateMachine EmergencyDevice = { Idle };
+TStateMachine EmergencyDevice = {Idle};
 
-int main(){
-    std::cout<<"Functional StateMachine"<<std::endl;
-    while(true){
-        srand((int) time(0));        
-        int event = rand()%10;
-        std::cout<<"event:"<<event<<std::endl;
-        TStateMachine* machine =&EmergencyDevice;
-        (machine->curState)(machine, (EIndication)event);
-    }
+int main()
+{
+  std::cout << "Functional StateMachine" << std::endl;
+  while (true)
+  {
+    srand((int)time(0));
+    int event = rand() % 10;
+    std::cout << "event:" << event << std::endl;
+    TStateMachine *machine = &EmergencyDevice;
+    (machine->curState)(machine, (EIndication)event);
+  }
 }

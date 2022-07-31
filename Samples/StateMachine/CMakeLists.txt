@@ -1,2 +1,3 @@
 add_subdirectory(LookUpTableStateMachine)
 add_subdirectory(FunctionalStateMachine)
+add_subdirectory(StateDesignPattern)

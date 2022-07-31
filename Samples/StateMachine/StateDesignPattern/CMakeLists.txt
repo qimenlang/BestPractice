@@ -1,0 +1,1 @@
+add_executable(StateDesignPattern  StateDesignPattern.cpp       "StateDesignPattern.h")
