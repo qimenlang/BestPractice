@@ -23,7 +23,13 @@ void NotifyInvalidInput(EIndication input)
     std::cerr << "invalid input" << input << std::endl;
 }
 
-
+class State;
+class Idle;
+class Ringing;
+class Dial;
+class Connected;
+class Busy;
+class Alerting;
 class Machine
 {
     class State* curState;
@@ -35,7 +41,6 @@ public:
         curState = s;
     }
 };
-
 
 class State
 {
