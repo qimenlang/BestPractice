@@ -1,14 +1,20 @@
 #pragma once
 #include "Common.h"
 #include <iostream>
-class State{
+class Runable{
+    public:
+        Runable(){};
+        virtual ~Runable(){};
+        virtual void print() = 0;
+};
+class State :Runable {
     public:
         State(const std::string & name_in,float power = 0.0):m_state_name(name_in),m_power(power){}
         std::string state_name(){return m_state_name;}
         float power(){return m_power;}
         float set_power(float power){m_power = power;}
 
-        void print(){
+        virtual void print() override {
             std::cout<<"state:"<<m_state_name<<" ,power:"<<m_power<<std::endl;
         }
     private:

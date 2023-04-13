@@ -1,3 +1,5 @@
 add_subdirectory(StateMachine)
 add_subdirectory(CallBack)
+add_subdirectory(Command)
+add_subdirectory(ik)
 add_executable(main main.cpp)
